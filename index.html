@@ -1,36 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Website</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: white;
+<title>♡</title>
+
+<style>
+  *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+  }
+
+  body{
+    width:100%;
+    height:100vh;
+    overflow:hidden;
+    background:#000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:Arial,sans-serif;
+    perspective:1000px;
+  }
+
+  .container{
+    position:relative;
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+  }
+
+  h1{
+    position:absolute;
+    top:12%;
+    color:white;
+    font-size:1.4rem;
+    font-weight:500;
+    letter-spacing:1px;
+    z-index:10;
+  }
+
+  .scene{
+    position:relative;
+    width:320px;
+    height:320px;
+    transform-style:preserve-3d;
+    animation:spin 10s linear infinite;
+  }
+
+  .word{
+    position:absolute;
+    color:#ff69b4;
+    font-size:11px;
+    font-weight:bold;
+    white-space:nowrap;
+    text-shadow:
+      0 0 5px #ff69b4,
+      0 0 10px #ff1493;
+  }
+
+  @keyframes spin{
+    from{
+      transform:rotateY(0deg) rotateX(10deg);
+    }
+    to{
+      transform:rotateY(360deg) rotateX(10deg);
+    }
+  }
+
+  @media (max-width:600px){
+    .scene{
+      transform:scale(0.85);
     }
 
-    img {
-      max-width: 400px;
-      width: 90%;
-      border-radius: 12px;
-      margin-top: 20px;
+    h1{
+      font-size:1.2rem;
+      top:10%;
     }
-  </style>
+  }
+</style>
 </head>
+
 <body>
+
+<div class="container">
 
   <h1>hai aleksa.</h1>
 
-  <img src="bunnicat.jpg" alt="Image">
+  <audio autoplay loop>
+    <source src="imyourman.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="scene" id="heart"></div>
+
+</div>
+
+<script>
+  const heart = document.getElementById("heart");
+  const text = "I LOVE YOU";
+  const points = [];
+
+  // thinner heart
+  for(let t = 0; t < Math.PI * 2; t += 0.22){
+
+    const x = 16 * Math.pow(Math.sin(t),3);
+
+    const y =
+      13 * Math.cos(t)
+      - 5 * Math.cos(2*t)
+      - 2 * Math.cos(3*t)
+      - Math.cos(4*t);
+
+    points.push({
+      x:x * 8,
+      y:-y * 8
+    });
+  }
+
+  // less depth layers
+  for(let layer = -2; layer <= 2; layer++){
+
+    points.forEach((p)=>{
+
+      const span = document.createElement("span");
+
+      span.className = "word";
+      span.innerText = text;
+
+      const z = layer * 18;
+
+      span.style.left = `${160 + p.x}px`;
+      span.style.top = `${160 + p.y}px`;
+      span.style.transform = `translateZ(${z}px)`;
+
+      heart.appendChild(span);
+
+    });
+
+  }
+</script>
 
 </body>
 </html>
